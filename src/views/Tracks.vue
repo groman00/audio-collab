@@ -2,6 +2,8 @@
 </style>
 <template>
   <v-container fluid>
+    <v-btn color="info" @click="createTrack()">Add Track</v-btn>
+
     <v-list v-if="tracks.length" two-line>
       <v-list-tile v-for="track in tracks" :key="track.id" avatar @click="trackClicked(track)">
         <v-list-tile-avatar>
@@ -9,7 +11,7 @@
         </v-list-tile-avatar>
         <v-list-tile-content>
           <v-list-tile-title>{{ track.title }}</v-list-tile-title>
-          <v-list-tile-sub-title>ID: {{ track.id }}</v-list-tile-sub-title>
+          <v-list-tile-sub-title>{{ track.created_at }}</v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-action>
           <v-btn icon ripple>
@@ -42,7 +44,7 @@ export default {
     this.getTrackItems();
   },
   methods: {
-    ...mapActions(["getTrackItems"]),
+    ...mapActions(["getTrackItems", "createTrack"]),
     trackClicked(track) {
       console.log(track);
     }

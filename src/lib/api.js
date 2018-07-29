@@ -53,11 +53,8 @@ class Api {
    */
   post(name, params = {}, body = {}, query = {}, config = {}) {
     try {
-      return this.http.post(
-        `${router.match({ name, params, query }).fullPath}/`,
-        body,
-        config
-      );
+      const route = router.match({ name, params, query });
+      return this.http.post(`${HOST}/${route.path}`, body, config);
     } catch (e) {
       return Promise.reject("Route Not Found");
     }
