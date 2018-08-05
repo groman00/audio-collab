@@ -67,6 +67,8 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+    <audio controls :src="audio"/>
+
     <!--
     <v-footer :fixed="fixed" app>
       <span>&copy; 2017</span>
@@ -94,12 +96,26 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "Vuetify.js"
+      title: "Vuetify.js",
+      recorder: null,
+      recording: false,
+      audio: null
     };
   },
   methods: {
     record() {
       // console.log(new Recorder());
+
+      if (this.recorder) {
+        this.recorder.stop();
+        this.recorder.exportWAV((blob) => {
+          console.log('callback', blob);
+          const url = URL.createObjectURL(blob)
+          this.audio = url;
+        });
+        return;
+      }
+
       let context;
       try {
           window.AudioContext = window.AudioContext || window.webkitAudioContext  || window.mozAudioContext || window.msAudioContext;
@@ -112,9 +128,10 @@ export default {
       }
 
       if (navigator.getUserMedia) {
-          navigator.getUserMedia({audio: true}, function (stream) {
+          navigator.getUserMedia({ audio: true }, (stream) => {
               var input = context.createMediaStreamSource(stream);
-              const recorder = new Recorder(input);
+              this.recorder = new Recorder(input);
+              this.recorder.record();
           }, function (e) {
               window.alert('Please enable your microphone to begin recording');
           });
