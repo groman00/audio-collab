@@ -1,41 +1,37 @@
-// https://github.com/mattdiamond/Recorderjs
-// https://medium.com/creative-technology-concepts-code/recording-syncing-and-exporting-web-audio-1e1a1e35ef08
+/**
+ * Modified from Recorderjs
+ *
+ * https://github.com/mattdiamond/Recorderjs
+ * https://medium.com/creative-technology-concepts-code/recording-syncing-and-exporting-web-audio-1e1a1e35ef08
+ */
+
+const config = {
+  workerPath: './worker.js',
+  numChannels: 2,
+  bufferLen: 8192 //4096
+};
 
 class Recorder {
-  constructor(source, cfg) {
-    // if ('Worker' in window) {
-    //   const worker = new Worker("./worker.js");
-    //   console.log('foo', worker);
-    //   worker.onmessage = (e) => {
-    //     console.log('message from worker', e);
-    //   };
-    // } else {
-    //   alert("Sorry! No Web Worker support.");
-    // }
+  constructor(source) {
+    const { bufferLen, numChannels, workerPath } = config;
+    const { context } = source;
 
-    var config = cfg || {
-      workerPath: "./worker.js"
-    };
-    var bufferLen = config.bufferLen || 8192; //4096
-    var numChannels = config.numChannels || 2;
-    this.context = source.context;
+    this.recording = false;
+    this.currCallback = Function.prototype;
+
     this.node = (
-      this.context.createScriptProcessor || this.context.createJavaScriptNode
-    ).call(this.context, bufferLen, numChannels, numChannels);
-    this.worker = new Worker(config.workerPath || WORKER_PATH);
+      context.createScriptProcessor || context.createJavaScriptNode
+    ).call(context, bufferLen, numChannels, numChannels);
+
+    this.worker = new Worker(workerPath);
     this.worker.postMessage({
-      command: "init",
+      command: 'init',
       config: {
-        sampleRate: this.context.sampleRate,
+        sampleRate: context.sampleRate,
         numChannels: numChannels
       }
     });
-    this.recording = false;
-    this.currCallback;
-    // var recording = false,
-    //   currCallback;
-
-    this.node.onaudioprocess = (e) => {
+    this.node.onaudioprocess = e => {
       if (!this.recording) return;
       console.log('recording', e);
       var buffer = [];
@@ -43,26 +39,23 @@ class Recorder {
         buffer.push(e.inputBuffer.getChannelData(channel));
       }
       this.worker.postMessage({
-        command: "record",
+        command: 'record',
         buffer: buffer
       });
     };
-
-    this.worker.onmessage = (e) => {
+    this.worker.onmessage = e => {
       var blob = e.data;
       this.currCallback(blob);
-    }
-
+    };
     source.connect(this.node);
-    this.node.connect(this.context.destination); //this should not be necessary
-
-    console.log(this);
+    this.node.connect(context.destination);
   }
 
-  // stopWorker() {
-  // w.terminate();
-  // w = undefined;
-  // }
+  stopWorker() {
+    this.worker.terminate();
+    this.worker = undefined;
+  }
+
   record() {
     this.recording = true;
   }
@@ -71,12 +64,9 @@ class Recorder {
     this.recording = false;
   }
 
-  exportWAV(cb, type, before, after){
-    // this.currCallback = cb || config.callback;
+  exportWAV(cb, type, before, after) {
     this.currCallback = cb;
     type = type || 'audio/wav';
-    // type = type || config.type || 'audio/wav';
-    if (!this.currCallback) throw new Error('Callback not set');
     this.worker.postMessage({
       command: 'exportWAV',
       type: type,

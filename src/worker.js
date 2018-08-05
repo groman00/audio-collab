@@ -1,5 +1,9 @@
-// https://github.com/mattdiamond/Recorderjs
-// https://medium.com/creative-technology-concepts-code/recording-syncing-and-exporting-web-audio-1e1a1e35ef08
+/**
+ * Modified from Recorderjs
+ *
+ * https://github.com/mattdiamond/Recorderjs
+ * https://medium.com/creative-technology-concepts-code/recording-syncing-and-exporting-web-audio-1e1a1e35ef08
+ */
 
 var recLength = 0,
   recBuffers = [],
