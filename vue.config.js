@@ -1,3 +1,9 @@
 module.exports = {
-  lintOnSave: false
+  lintOnSave: false,
+  configureWebpack: {
+    entry: {
+      app: './src/main.js',
+      // worker: './src/worker.js'
+    }
+  }
 };

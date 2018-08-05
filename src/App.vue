@@ -29,7 +29,7 @@
       :clipped-left="clipped"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
+      <!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
       </v-btn>
       <v-btn icon @click.stop="clipped = !clipped">
@@ -42,6 +42,10 @@
       <v-spacer></v-spacer>
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>menu</v-icon>
+      </v-btn> -->
+      <v-spacer></v-spacer>
+      <v-btn icon @click.stop="record">
+        <v-icon>mic</v-icon>
       </v-btn>
     </v-toolbar>
     <v-content>
@@ -72,6 +76,8 @@
 </template>
 
 <script>
+import Recorder from './lib/Recorder.js';
+
 export default {
   name: "App",
   data() {
@@ -90,6 +96,32 @@ export default {
       rightDrawer: false,
       title: "Vuetify.js"
     };
+  },
+  methods: {
+    record() {
+      // console.log(new Recorder());
+      let context;
+      try {
+          window.AudioContext = window.AudioContext || window.webkitAudioContext  || window.mozAudioContext || window.msAudioContext;
+          navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+          window.URL = window.URL || window.webkitURL || window.mozURL  || window.msURL;
+          context = new window.AudioContext();
+          context.createGain = context.createGain || context.createGainNode;
+      } catch (e) {
+          window.alert('Your browser does not support WebAudio, try Google Chrome');
+      }
+
+      if (navigator.getUserMedia) {
+          navigator.getUserMedia({audio: true}, function (stream) {
+              var input = context.createMediaStreamSource(stream);
+              const recorder = new Recorder(input);
+          }, function (e) {
+              window.alert('Please enable your microphone to begin recording');
+          });
+      } else {
+          window.alert('Your browser does not support recording, try Google Chrome');
+      }
+    }
   }
 };
 </script>
