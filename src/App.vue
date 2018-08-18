@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import AudioRecorder from './components/AudioRecorder';
+import AudioRecorder from "./components/AudioRecorder";
 
 export default {
   name: "App",
@@ -57,7 +57,7 @@ export default {
           title: "Inspire"
         }
       ],
-      miniVariant: false,
+      miniVariant: false
     };
   },
   mounted() {

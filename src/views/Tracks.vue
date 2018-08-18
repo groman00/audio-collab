@@ -29,7 +29,7 @@
   </v-container>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -37,16 +37,19 @@ export default {
   },
   computed: {
     ...mapGetters({
-      tracks: "trackItems"
+      tracks: 'trackItems'
     })
   },
   mounted() {
     this.getTrackItems();
   },
   methods: {
-    ...mapActions(["getTrackItems", "createTrack"]),
-    trackClicked(track) {
-      console.log(track);
+    ...mapActions([
+      'getTrackItems',
+      'createTrack'
+    ]),
+    trackClicked({ id }) {
+      this.$router.push({ name: 'track', params: { id } });
     }
   }
 };
