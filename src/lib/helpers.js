@@ -8,10 +8,10 @@ export function blobToBase64(blob) {
     try {
       reader.readAsDataURL(blob);
       reader.onloadend = () => {
-        resolve(reader.result.split(',')[1]);
-      }
-    } catch(e) {
-      reject('Error converting audio', e);
+        resolve(reader.result.split(",")[1]);
+      };
+    } catch (e) {
+      reject("Error converting audio", e);
     }
   });
 }

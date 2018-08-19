@@ -2,6 +2,7 @@ import axios from "axios";
 import router from "../routers/api";
 
 const HOST = "http://localhost:3333/api/v1";
+// const HOST = "https://4dea7a30.ngrok.io/api/v1";
 
 class Api {
   /**/

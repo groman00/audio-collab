@@ -2,8 +2,6 @@
 </style>
 <template>
   <v-container fluid>
-    <v-btn color="info" @click="createTrack()">Add Track</v-btn>
-
     <v-list v-if="tracks.length" two-line>
       <v-list-tile v-for="track in tracks" :key="track.id" avatar @click="trackClicked(track)">
         <v-list-tile-avatar>
@@ -44,10 +42,7 @@ export default {
     this.getTrackItems();
   },
   methods: {
-    ...mapActions([
-      'getTrackItems',
-      'createTrack'
-    ]),
+    ...mapActions(['getTrackItems', 'createTrack']),
     trackClicked({ id }) {
       this.$router.push({ name: 'track', params: { id } });
     }

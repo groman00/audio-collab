@@ -3,19 +3,19 @@
     <v-btn icon @click.stop="toggleRecord">
         <v-icon>mic</v-icon>
     </v-btn>
-    <audio v-show="audio" controls :src="audio"/>
+    <!-- <audio v-show="audio" controls :src="audio"/> -->
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
-import { blobToBase64 } from '../lib/helpers';
+import { blobToBase64 } from "../lib/helpers";
 import Recorder from "../lib/Recorder";
 
 export default {
   data() {
     return {
-      audio: null,
+      // audio: null,
       audioContext: null,
       recorder: null,
       recording: false
@@ -47,43 +47,13 @@ export default {
       } else {
         this.recorder.stop();
         this.recorder.exportWAV(blob => {
-          console.log("callback", blob);
-          const url = URL.createObjectURL(blob);
-          this.audio = url;
-
-
-
-          const data = new FormData();
-          data.append('audio', blob, 'new audio');
-
-          const config = {
-            headers: {
-              'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
-            },
-          };
-
-          // Create new track
-          this.createTrack(data, config);
-
-
-          // blobToBase64(blob)
-          //   .then((base64) => {
-          //     this.createTrack({
-          //       audio: base64
-          //     });
-          //   })
-          //   .catch((e) => {
-          //     console.log(e);
-          //   });
-
+          this.$emit('onRecordComplete', blob);
         });
       }
     }
   },
   methods: {
-    ...mapActions([
-      'createTrack'
-    ]),
+    ...mapActions(['createTrack']),
     toggleRecord() {
       this.recording = !this.recording;
     }
