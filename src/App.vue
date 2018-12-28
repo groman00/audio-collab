@@ -61,34 +61,31 @@ export default {
     };
   },
   created() {
-    this.checkForSupport();
+    // this.checkForSupport();
   },
   methods: {
-    checkForSupport() {
-      try {
-        window.AudioContext =
-          window.AudioContext ||
-          window.webkitAudioContext ||
-          window.mozAudioContext ||
-          window.msAudioContext;
-
-        // console.log('foo');
-        // console.log(window.AudioContext);
-
-
-        navigator.getUserMedia =
-          navigator.getUserMedia ||
-          navigator.webkitGetUserMedia ||
-          navigator.mozGetUserMedia ||
-          navigator.msGetUserMedia;
-        window.URL =
-          window.URL || window.webkitURL || window.mozURL || window.msURL;
-      } catch (e) {
-        window.alert(
-          "Your browser does not support WebAudio, try Google Chrome"
-        );
-      }
-    }
+    // checkForSupport() {
+    //   try {
+    //     window.AudioContext =
+    //       window.AudioContext ||
+    //       window.webkitAudioContext ||
+    //       window.mozAudioContext ||
+    //       window.msAudioContext;
+    //     // console.log('foo');
+    //     // console.log(window.AudioContext);
+    //     navigator.getUserMedia =
+    //       navigator.getUserMedia ||
+    //       navigator.webkitGetUserMedia ||
+    //       navigator.mozGetUserMedia ||
+    //       navigator.msGetUserMedia;
+    //     window.URL =
+    //       window.URL || window.webkitURL || window.mozURL || window.msURL;
+    //   } catch (e) {
+    //     window.alert(
+    //       "Your browser does not support WebAudio, try Google Chrome"
+    //     );
+    //   }
+    // }
   }
 };
 </script>
