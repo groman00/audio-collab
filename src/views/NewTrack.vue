@@ -1,8 +1,3 @@
-<style>
-.new-track .buttons button {
-  margin: 1rem;
-}
-</style>
 <template>
   <v-container class="new-track" fluid>
     <h1>Hello</h1>
@@ -22,8 +17,6 @@ import { mapActions, mapGetters } from "vuex";
 import WaveformPlaylist from "waveform-playlist";
 
 export default {
-  // components: {},
-  // props: {},
   data() {
     return {
       downloadUrl: undefined,
@@ -31,27 +24,6 @@ export default {
       playlist: undefined,
       recording: false
     };
-  },
-  watch: {
-    // recording(bool) {
-    //   const { emitter } = this;
-    //   if (bool) {
-    //     emitter.emit('record');
-    //     return;
-    //   }
-    //   emitter.emit('stop');
-    // }
-  },
-  // computed: {
-  // ...mapGetters({
-  // })
-  // },
-  created() {
-    navigator.getUserMedia =
-      navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia ||
-      navigator.msGetUserMedia;
   },
   mounted() {
     const { gotStream, logError } = this;
@@ -77,24 +49,15 @@ export default {
     playlist.initExporter();
     this.emitter = playlist.getEventEmitter();
     this.emitter.on("audiorenderingfinished", (type, blob) => {
-      // if (type == "wav") {
-      //   if (this.downloadUrl) {
-      //     window.URL.revokeObjectURL(this.downloadUrl);
-      //   }
-
-      //   this.downloadUrl = window.URL.createObjectURL(data);
-      // }
-
       const data = new FormData();
       let config;
-      data.append('audio', blob, 'new audio');
+      data.append("audio", blob, "new audio");
       config = {
         headers: {
-          'Content-Type': `multipart/form-data; boundary=${data._boundary}`
+          "Content-Type": `multipart/form-data; boundary=${data._boundary}`
         }
       };
       this.createTrack(data, config);
-
     });
     this.playlist = playlist;
 
@@ -109,15 +72,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      // 'getTrack',
-      'createTrack'
-    ]),
+    ...mapActions(["createTrack"]),
     gotStream(stream) {
-      console.log("stream", stream);
-      // userMediaStream = stream;
-      // playlist.initRecorder(userMediaStream);
-      console.log(this.playlist);
+      // console.log("stream", stream);
+      // console.log(this.playlist);
       this.playlist.initRecorder(stream);
     },
     logError(e) {

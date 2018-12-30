@@ -3729,10 +3729,6 @@ hosted-git-info@^2.1.4:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.7.1.tgz#97f236977bd6e125408930ff6de3eec6281ec047"
 
-howler@^2.0.5:
-  version "2.0.14"
-  resolved "https://registry.yarnpkg.com/howler/-/howler-2.0.14.tgz#28e37800fea002fea147a3ca033660c4f1288a99"
-
 hpack.js@^2.1.6:
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/hpack.js/-/hpack.js-2.1.6.tgz#87774c0949e513f42e84575b3c45681fade2a0b2"
@@ -4805,10 +4801,6 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-math-clamp@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/math-clamp/-/math-clamp-1.0.0.tgz#3ca5facbf6ab9822154b707e641c6f1ff7c2af66"
-
 math-random@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.1.tgz#8b3aac588b8a66e4975e3cdea67f7bb329601fac"
@@ -5315,7 +5307,7 @@ oauth-sign@~0.8.1, oauth-sign@~0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.8.2.tgz#46a6ab7f0aead8deae9ec0565780b7d4efeb9d43"
 
-object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
+object-assign@^4.0.1, object-assign@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
 
@@ -5334,10 +5326,6 @@ object-hash@^1.1.4:
 object-keys@^1.0.11, object-keys@^1.0.8:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.12.tgz#09c53855377575310cca62f55bb334abff7b3ed2"
-
-object-values@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/object-values/-/object-values-1.0.0.tgz#72af839630119e5b98c3b02bb8c27e3237158105"
 
 object-visit@^1.0.0:
   version "1.0.1"
@@ -7584,15 +7572,6 @@ vue-eslint-parser@^2.0.3:
 vue-hot-reload-api@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.0.tgz#97976142405d13d8efae154749e88c4e358cf926"
-
-vue-howler@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/vue-howler/-/vue-howler-0.7.0.tgz#4ca885a6b2b32173a29ad400a2519561d1e0c14f"
-  dependencies:
-    howler "^2.0.5"
-    math-clamp "^1.0.0"
-    object-assign "^4.1.1"
-    object-values "^1.0.0"
 
 vue-loader@^15.2.4:
   version "15.2.6"

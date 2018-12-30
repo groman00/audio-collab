@@ -2,70 +2,119 @@
 </style>
 <template>
   <v-container fluid>
-    <v-card v-if="track || id === 'new'">
-      <v-card-media
-        src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
-        height="200px"
-      ></v-card-media>
-      <v-card-actions>
-        <!-- <v-btn flat @click="createTrack()">Add Track</v-btn> -->
-        <audio-recorder @onRecordComplete="addNewTrack"/>
-        <v-btn flat v-if="newSource.length" @click="playAll">Play All</v-btn>
-      </v-card-actions>
-      <v-card-title primary-title>
-        <div>
-          <!-- <h3 class="headline mb-0" v-text="track.title"/> -->
-          <!-- <div v-text="track.created_at" /> -->
-          <audio-player ref="originalTrack" v-if="originalSource.length" :sources="originalSource" :formats="['wav']" :volume="1"/>
-          <audio-player ref="newTrack" v-if="newSource.length" :sources="newSource" :formats="['wav']" :volume="1"/>
-        </div>
-      </v-card-title>
-    </v-card>
+    <div class="buttons">
+      <v-btn :disabled="recording" @click="emitter.emit('record');recording = true;">Record</v-btn>
+      <v-btn @click="emitter.emit('play')">Play</v-btn>
+      <v-btn @click="emitter.emit('pause')">Pause</v-btn>
+      <v-btn @click="emitter.emit('stop');recording = false;">Stop</v-btn>
+      <v-btn @click="emitter.emit('startaudiorendering', 'wav');">Render to Wav</v-btn>
+    </div>
+    <div ref="playlistContainer" class="playlist-container"></div>
+    <a v-if="downloadUrl" :href="downloadUrl">File Download</a>
+    <!-- <div v-if="track">
+    </div>
     <div v-else>
       <v-progress-circular
         indeterminate
         color="primary"
       ></v-progress-circular>
-    </div>
+    </div> -->
   </v-container>
 </template>
 <script>
-import AudioRecorder from "../components/AudioRecorder";
-import AudioPlayer from "../components/AudioPlayer";
 import { mapActions, mapGetters } from "vuex";
-
+import WaveformPlaylist from "waveform-playlist";
 export default {
-  components: {
-    AudioPlayer,
-    AudioRecorder
-  },
+  // components: {},
   props: {
     id: {}
   },
   data() {
     return {
-      originalSource: [],
-      newSource: []
+      downloadUrl: undefined,
+      emitter: undefined,
+      playlist: undefined,
+      recording: false
     };
   },
   watch: {
-    track(t) {
-      this.originalSource = [t.location];
+    track({ created_at, id, location, title, updated_at }) {
+      this.playlist
+        .load([
+          {
+            src: location,
+            name: title,
+            // "fadeIn": {
+            //   "duration": 0.5
+            // },
+            // "fadeOut": {
+            //   "duration": 0.5
+            // },
+            // "cuein": 5.918,
+            // "cueout": 14.5,
+            customClass: "test-custom-class",
+            waveOutlineColor: "#c0dce0"
+          }
+        ])
+        .then(() => {
+          //can do stuff with the playlist.
+          //initialize the WAV exporter.
+          this.playlist.initExporter();
+        });
     }
   },
   computed: {
     ...mapGetters({
-      track: 'activeTrack'
+      track: "activeTrack"
     })
   },
-  created() {
-    // clear track
-  },
+  // created() {},
   mounted() {
-    if (this.id === 'new') {
-
-    } else {
-      this.getTrack(this.id);
+    const { gotStream, logError } = this;
+    const constraints = {
+      audio: true
+    };
+    const playlist = WaveformPlaylist({
+      samplesPerPixel: 3000,
+      waveHeight: 100,
+      container: this.$refs.playlistContainer,
+      state: "cursor",
+      colors: {
+        waveOutlineColor: "#E0EFF1",
+        timeColor: "grey",
+        fadeColor: "black"
+      },
+      timescale: true,
+      controls: {
+        show: true, //whether or not to include the track controls
+        width: 200 //width of controls in pixels
+      },
+      seekStyle: "line",
+      zoomLevels: [500, 1000, 3000, 5000]
+    });
+    playlist.initExporter();
+    this.emitter = playlist.getEventEmitter();
+    this.emitter.on("audiorenderingfinished", (type, blob) => {
+      const data = new FormData();
+      let config;
+      data.append("audio", blob, "new audio");
+      config = {
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${data._boundary}`
+        }
+      };
+      this.createTrack(data, config);
+    });
+    this.playlist = playlist;
+    this.getTrack(this.id);
+    // Start media stream.
+    if (navigator.mediaDevices) {
+      navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then(gotStream)
+        .catch(logError);
+    } else if (navigator.getUserMedia && "MediaRecorder" in window) {
+      navigator.getUserMedia(constraints, gotStream, logError);
     }
   },
   methods: {
@@ -73,30 +122,13 @@ export default {
       'getTrack',
       'createTrack'
     ]),
-    addNewTrack(blob) {
-      console.log('blob: ', blob);
-
-      const url = URL.createObjectURL(blob);
-
-      if (this.originalSource.length) {
-        this.newSource= [url];
-      } else {
-        this.originalSource = [url];
-      }
-
-      const data = new FormData();
-      let config;
-      data.append('audio', blob, 'new audio');
-      config = {
-        headers: {
-          'Content-Type': `multipart/form-data; boundary=${data._boundary}`
-        }
-      };
-      // this.createTrack(data, config);
+    gotStream(stream) {
+      // console.log("stream", stream);
+      // console.log(this.playlist);
+      this.playlist.initRecorder(stream);
     },
-    playAll() {
-      this.$refs.newTrack.play();
-      this.$refs.originalTrack.play();
+    logError(e) {
+      console.error(e);
     }
   }
 };
