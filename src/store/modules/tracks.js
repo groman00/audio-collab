@@ -21,7 +21,8 @@ const RECEIVE_TRACK_FAILURE = "RECEIVE_TRACK_FAILURE";
 const state = {
   items: [],
   status: 0,
-  activeTrack: null
+  activeTrack: null,
+  newTrack: null,
 };
 
 /**
@@ -29,7 +30,8 @@ const state = {
  */
 const getters = {
   trackItems: state => state.items,
-  activeTrack: state => state.activeTrack
+  activeTrack: state => state.activeTrack,
+  newTrack: state => state.newTrack,
 };
 
 /**
@@ -78,7 +80,7 @@ const mutations = {
     state.status = 0;
   },
   [TRACK_CREATED](state, track) {
-    // state.activeTrack = track;
+    state.newTrack = track;
     state.items.push(track);
     state.status = 1;
   },

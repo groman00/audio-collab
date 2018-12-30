@@ -1,31 +1,21 @@
+<style scoped>
+
+</style>
 <template>
   <v-container fluid>
     <v-slide-y-transition mode="out-in">
-      <v-layout column align-center>
-        <img src="@/assets/logo.png" alt="Vuetify.js" class="mb-5">
-        <blockquote>
-          Page Not Found
-        </blockquote>
+      <v-layout column wrap align-center>
+        <div class="text-xs-center">
+          <v-btn to="/tracks/new" color="primary" dark large>Create a New Track</v-btn>
+        </div>
+        <div style="text-align: center;">
+        or
+        </div>
+        <div>
+          <v-btn to="/tracks" color="secondary" dark large>Record over an existing track</v-btn>
+        </div>
       </v-layout>
     </v-slide-y-transition>
   </v-container>
 </template>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>

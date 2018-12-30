@@ -219,9 +219,6 @@
   background-color: green;
 }
 
-.new-track .buttons button {
-  margin: 1rem;
-}
 </style>
 
 <template>
@@ -238,7 +235,17 @@
       <v-list>
         <v-list-tile>
           <v-list-tile-action>
-            <v-icon>bubble_chart</v-icon>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              <router-link to="/">Home</router-link>
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>audiotrack</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -249,12 +256,15 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
+      dark
+      color="primary"
       app
       :clipped-left="clipped"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title class="white--text">Track Collaboration</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon to="/tracks/new">
+      <v-btn v-if="currentRoute !== 'track-new' " icon to="/tracks/new">
         <v-icon>add</v-icon>
       </v-btn>
     </v-toolbar>
@@ -268,6 +278,7 @@ export default {
   name: "App",
   data() {
     return {
+      currentRoute: undefined,
       clipped: false,
       drawer: false,
       fixed: false,
@@ -286,6 +297,11 @@ export default {
       navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia ||
       navigator.msGetUserMedia;
+  },
+  watch: {
+    '$route' (to, from) {
+      this.currentRoute = to.name;
+    }
   }
 };
 </script>

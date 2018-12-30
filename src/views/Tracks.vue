@@ -2,6 +2,7 @@
 </style>
 <template>
   <v-container fluid>
+    <h1>Track List</h1>
     <v-list v-if="tracks.length" two-line>
       <v-list-tile v-for="track in tracks" :key="track.id" avatar @click="trackClicked(track)">
         <v-list-tile-avatar>
