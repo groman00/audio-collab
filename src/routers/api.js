@@ -9,6 +9,10 @@ export default new VueRouter({
     {
       path: "tracks/:id",
       name: "track"
-    }
+    },
+    {
+      path: "users",
+      name: "users"
+    },
   ]
 });

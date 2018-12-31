@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import Tracks from "../views/Tracks.vue";
 import NewTrack from "../views/NewTrack.vue";
 import Track from "../views/Track.vue";
+import Users from "../views/Users.vue";
 
 Vue.use(Router);
 
@@ -29,6 +30,11 @@ export default new Router({
       name: "track",
       component: Track,
       props: true
+    },
+    {
+      path: "/users",
+      name: "users",
+      component: Users,
     }
   ]
 });
